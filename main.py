@@ -6,7 +6,7 @@ from PIL import Image
 
 # load and show an image with Pillow
 # Open the image form working directory
-image = Image.open('Koala_climbing_tree.jpg')
+image = Image.open('images/Koala_climbing_tree.jpg')
 # summarize some details about the image
 print(image.format)
 print(image.size)
