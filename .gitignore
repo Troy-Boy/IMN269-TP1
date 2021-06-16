@@ -2,3 +2,4 @@ pyenv/*
 venv/*
 .vscode/*
 __pycache__/
+settings.json
