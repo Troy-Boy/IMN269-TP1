@@ -1,7 +1,6 @@
 import numpy as np
 import PIL
 from PIL import Image
-from matplotlib.image import imread
 from imn_utils import PrintPoints
 
 # print('Pillow Version:', PIL.__version__)
@@ -9,7 +8,6 @@ from imn_utils import PrintPoints
 # load and show an image with Pillow
 # Open the image form working directory
 image = Image.open('images/Koala_climbing_tree.jpg')
-img = imread('images/Koala_climbing_tree.jpg')
 # summarize some details about the image
 print(image.format)
 print(image.size)
