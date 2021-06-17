@@ -2,16 +2,19 @@ import cv2
 import numpy as np
 import PIL
 import balls
+from PIL import Image
 
 # POUR INSTALLER cv2
 # pip install opencv-python
 
 # Picture path
-img = cv2.imread('images/building.jpg')
-coordoX =[]# [556, 759, 563, 763, 553, 226, 414, 346]
-coordoY =[]# [746, 687, 535, 582, 747, 721, 255, 273]
-halfX = len(img[0])
-halfY = len(img)
+img = cv2.imread('images/trapeze.jpg')
+image = Image.open('images/trapeze.jpg')
+# img2 = img
+# coordoX = [556, 759, 563, 763, 553, 226, 414, 346]
+# coordoY = [746, 687, 535, 582, 747, 721, 255, 273]
+coordoX = []
+coordoY = []
 # horizon = [0, 0, 0]
 
 
@@ -23,32 +26,50 @@ def update(event, x, y, flags, param):
         coordoY.append(y)
         print(x, y)
 
-    for i in coordoX:
-        if(i % 2 != 0):
+    # for i in coordoX:
+    #     if(i % 2 != 0):
 
-            cv2.line(img, (coordoX[i], coordoY[i]),
-                     (coordoX[i+1], coordoY[i+1]),
+    #         cv2.line(img, (coordoX[i], coordoY[i]),
+    #                  (coordoX[i+1], coordoY[i+1]),
+    #                  (0, 0, 0), thickness=3)
+
+    #     cv2.circle(img, (coordoX[i],  coordoY[i]),
+    #                1, (200, 200, 200), thickness=-1)
+    #     cv2.putText(img, (coordoX[i],  coordoY[i]), cv2.FONT_HERSHEY_PLAIN,
+    #                 1.0, (0, 0, 0), thickness=1)
+
+    # cv2.imshow("fenetre image", img)
+    if (event == cv2.EVENT_LBUTTONDOWN):
+        xy = "%d,%d" % (x, y)
+        coordoX.append(x)
+        coordoY.append(y)
+        # print(x, y)
+
+        if(len(coordoX) % 2 == 0):
+            # print("should draw line")
+            cv2.line(img, (x, y),
+                     (coordoX[len(coordoX)-2], coordoY[len(coordoX)-2]),
                      (0, 0, 0), thickness=3)
-
-        cv2.circle(img, (coordoX[i],  coordoY[i]),
-                   1, (200, 200, 200), thickness=-1)
-        cv2.putText(img, (coordoX[i],  coordoY[i]), cv2.FONT_HERSHEY_PLAIN,
+        cv2.circle(img, (x, y), 1, (200, 200, 200), thickness=-1)
+        cv2.putText(img, xy, (x, y), cv2.FONT_HERSHEY_PLAIN,
                     1.0, (0, 0, 0), thickness=1)
+        cv2.imshow("fenetre image", img)
 
-    cv2.imshow("fenetre image", img)
+        if (len(coordoX) == 8 and len(coordoY) == 8):
+            f1 = calculIntersection(0)
+            f2 = calculIntersection(4)
+            horizon = calculateHorizon(f1, f2)
+            # print("thats horizon:")
+            # print(horizon)
+            matH = calculateH(horizon)
+            imgTransfo = np.array((len(img[0]), len(img)))
 
-    if (len(coordoX) == 8 and len(coordoY) == 8):
-        f1 = calculIntersection(0)  # marche pas mais bon who cares amarite
-        f2 = calculIntersection(4)
-        horizon = calculateHorizon(f1, f2)
-        print("thats horizon:")
-        print(horizon)
-        matH = calculateH(horizon)
-        print(matH.dot(horizon))
-        imgTransfo = cv2.warpPerspective(img, matH, (len(img[0]), len(
-            img)))
+            image_warped = cv2.warpPerspective(
+                img, matH, (image.size[0], image.size[1]))
 
-        cv2.imshow("Resultat", imgTransfo)
+            cv2.imshow("Resultat", image_warped)
+            cv2.imwrite("res.jpg", image_warped)
+            exit()
 
 
 def calculateH(df):
@@ -62,16 +83,10 @@ def calculateH(df):
 
 
 def calculateHorizon(f1, f2):
-    # pFuite1 = balls.seg_intersect(coordoX[0]-coordoX[1], coordoY[0] - coordoY[1],
-    #                               coordoX[2]-coordoX[3], coordoY[2] - coordoY[3])
-    # pFuite2 = balls.seg_intersect(coordoX[4]-coordoX[5], coordoY[4] - coordoY[5],
-    #                               coordoX[6]-coordoX[7], coordoY[6] - coordoY[7])
-    # return np.matmul(pFuite1, pFuite2)
-
-    print("thats f1:")
-    print(f1)
-    print("thats f2:")
-    print(f2)
+    # print("thats f1:")
+    # print(f1)
+    # print("thats f2:")
+    # print(f2)
 
     d_horizon = np.cross(f1, f2)
 
