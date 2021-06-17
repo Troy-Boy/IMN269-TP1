@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import PIL
 import balls
+from PIL import Image
 
 # POUR INSTALLER cv2
 # pip install opencv-python
@@ -68,16 +69,10 @@ def calculateH(df):
 
 
 def calculateHorizon(f1, f2):
-    # pFuite1 = balls.seg_intersect(coordoX[0]-coordoX[1], coordoY[0] - coordoY[1],
-    #                               coordoX[2]-coordoX[3], coordoY[2] - coordoY[3])
-    # pFuite2 = balls.seg_intersect(coordoX[4]-coordoX[5], coordoY[4] - coordoY[5],
-    #                               coordoX[6]-coordoX[7], coordoY[6] - coordoY[7])
-    # return np.matmul(pFuite1, pFuite2)
-
-    print("thats f1:")
-    print(f1)
-    print("thats f2:")
-    print(f2)
+    # print("thats f1:")
+    # print(f1)
+    # print("thats f2:")
+    # print(f2)
 
     d_horizon = np.cross(f1, f2)
 

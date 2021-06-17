@@ -10,7 +10,7 @@ from PIL import Image
 image = Image.open('images/church.jpg')
 # summarize some details about the image
 print(image.format)
-print(image.size)
+print(image.size[0])
 print(image.mode)
 
 # show the image
