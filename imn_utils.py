@@ -7,18 +7,21 @@ import balls
 # pip install opencv-python
 
 # Picture path
-img = cv2.imread('images/church.jpg')
-coordoX = [556, 759, 563, 763, 553, 226, 414, 346]
-coordoY = [746, 687, 535, 582, 747, 721, 255, 273]
+img = cv2.imread('images/building.jpg')
+coordoX =[]# [556, 759, 563, 763, 553, 226, 414, 346]
+coordoY =[]# [746, 687, 535, 582, 747, 721, 255, 273]
+halfX = len(img[0])
+halfY = len(img)
 # horizon = [0, 0, 0]
 
 
 def update(event, x, y, flags, param):
-    # if (event == cv2.EVENT_LBUTTONDOWN):
-    #     xy = "%d,%d" % (x, y)
-    #     # coordoX.append(x)
-    #     # coordoY.append(y)
-    #     print(x, y)
+    
+    if (event == cv2.EVENT_LBUTTONDOWN):
+        xy = "%d,%d" % (x, y)
+        coordoX.append(x)
+        coordoY.append(y)
+        print(x, y)
 
     for i in coordoX:
         if(i % 2 != 0):
@@ -41,9 +44,9 @@ def update(event, x, y, flags, param):
         print("thats horizon:")
         print(horizon)
         matH = calculateH(horizon)
-        imgTransfo = np.array((len(img[0]), len(img)))
+        print(matH.dot(horizon))
         imgTransfo = cv2.warpPerspective(img, matH, (len(img[0]), len(
-            img)), flags=cv2.WARP_INVERSE_MAP, borderMode=cv2.BORDER_CONSTANT)
+            img)))
 
         cv2.imshow("Resultat", imgTransfo)
 
@@ -76,14 +79,14 @@ def calculateHorizon(f1, f2):
 
 
 def calculIntersection(index):
-    x1 = coordoX[index] / 100
-    y1 = coordoY[index] / 100
+    x1 = coordoX[index] /100
+    y1 = coordoY[index] /100
     p1 = [x1, y1, 1]
 
     print("thats p1:", p1)
 
-    x2 = coordoX[index+1] / 100
-    y2 = coordoY[index+1] / 100
+    x2 = coordoX[index+1] /100
+    y2 = coordoY[index+1] /100
     p2 = [x2, y2, 1]
 
     print("thats p2:", p2)
@@ -92,14 +95,14 @@ def calculIntersection(index):
 
     print("thats d1:", d1)
 
-    x3 = coordoX[index+2] / 100
-    y3 = coordoY[index+2] / 100
+    x3 = coordoX[index+2] /100
+    y3 = coordoY[index+2] /100
     p3 = [x3, y3, 1]
 
     print("thats p3:", p3)
 
-    x4 = coordoX[index+3] / 100
-    y4 = coordoY[index+3] / 100
+    x4 = coordoX[index+3] /100
+    y4 = coordoY[index+3] /100
     p4 = [x4, y4, 1]
 
     print("thats p4:", p4)
