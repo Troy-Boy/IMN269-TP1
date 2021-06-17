@@ -10,45 +10,51 @@ import balls
 img = cv2.imread('images/building.jpg')
 coordoX =[]# [556, 759, 563, 763, 553, 226, 414, 346]
 coordoY =[]# [746, 687, 535, 582, 747, 721, 255, 273]
-halfX = len(img[0])
-halfY = len(img)
 # horizon = [0, 0, 0]
 
 
 def update(event, x, y, flags, param):
-    
-    if (event == cv2.EVENT_LBUTTONDOWN):
+    if event == cv2.EVENT_LBUTTONDOWN:
         xy = "%d,%d" % (x, y)
         coordoX.append(x)
         coordoY.append(y)
-        print(x, y)
-
-    for i in coordoX:
-        if(i % 2 != 0):
-
-            cv2.line(img, (coordoX[i], coordoY[i]),
-                     (coordoX[i+1], coordoY[i+1]),
-                     (0, 0, 0), thickness=3)
-
-        cv2.circle(img, (coordoX[i],  coordoY[i]),
-                   1, (200, 200, 200), thickness=-1)
-        cv2.putText(img, (coordoX[i],  coordoY[i]), cv2.FONT_HERSHEY_PLAIN,
+        cv2.circle(img, (x, y), 1, (0, 0, 255), thickness=-1)
+        cv2.putText(img, xy, (x, y), cv2.FONT_HERSHEY_PLAIN,
                     1.0, (0, 0, 0), thickness=1)
+        cv2.imshow("fenetre image", img)
+        print(x,y)
+    # if (event == cv2.EVENT_LBUTTONDOWN):
+    #     xy = "%d,%d" % (x, y)
+    #     coordoX.append(x)
+    #     coordoY.append(y)
+    #     print(x, y)
 
-    cv2.imshow("fenetre image", img)
+    #     for i in coordoX:
+    #         if(i % 2 != 0):
 
-    if (len(coordoX) == 8 and len(coordoY) == 8):
-        f1 = calculIntersection(0)  # marche pas mais bon who cares amarite
-        f2 = calculIntersection(4)
-        horizon = calculateHorizon(f1, f2)
-        print("thats horizon:")
-        print(horizon)
-        matH = calculateH(horizon)
-        print(matH.dot(horizon))
-        imgTransfo = cv2.warpPerspective(img, matH, (len(img[0]), len(
-            img)))
+    #             cv2.line(img, (coordoX[i], coordoY[i]),
+    #                     (coordoX[i+1], coordoY[i+1]),
+    #                     (0, 0, 0), thickness=3)
 
-        cv2.imshow("Resultat", imgTransfo)
+    #         cv2.circle(img, (coordoX[i],  coordoY[i]),
+    #                 1, (200, 200, 200), thickness=-1)
+    #         cv2.putText(img, (coordoX[i],  coordoY[i]), cv2.FONT_HERSHEY_PLAIN,
+    #                     1.0, (0, 0, 0), thickness=1)
+
+    #     cv2.imshow("fenetre image", img)
+
+    #     if (len(coordoX) == 8 and len(coordoY) == 8):
+    #         f1 = calculIntersection(0)  # marche pas mais bon who cares amarite
+    #         f2 = calculIntersection(4)
+    #         horizon = calculateHorizon(f1, f2)
+    #         print("thats horizon:")
+    #         print(horizon)
+    #         matH = calculateH(horizon)
+    #         print(matH.dot(horizon))
+    #         imgTransfo = cv2.warpPerspective(img, matH, (len(img[0]), len(
+    #             img)))
+
+    #         cv2.imshow("Resultat", imgTransfo)
 
 
 def calculateH(df):
