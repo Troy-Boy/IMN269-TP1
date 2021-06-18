@@ -7,10 +7,10 @@ from PIL import Image
 
 # load and show an image with Pillow
 # Open the image form working directory
-image = Image.open('images/church.jpg')
+image = Image.open('images/PERSPECTIVE05.jpg')
 # summarize some details about the image
 print(image.format)
-print(image.size[0])
+print(image.size)
 print(image.mode)
 
 # show the image
