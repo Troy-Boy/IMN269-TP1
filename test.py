@@ -57,18 +57,18 @@ def update(event, x, y, flags, param):
 
             # Calcul de l'horizon
             # horizon = np.cross([0.33, 1, 1], [6, 1, 1])
-            horizon = np.cross(vp1, vp2)
+            horizon = np.cross(abs(vp1), (vp2))
 
-            print("horizon:", horizon)
+            # print("horizon:", horizon)
             horizon[0] = 0
-            print("horizon:", horizon)
+            # print("horizon:", horizon)
 
             realHorizon = abs(horizon*100/horizon[2])
-            print("real horizon", realHorizon)
+            # print("real horizon", realHorizon)
 
             # calcul de H2
             h2 = calculateH(horizon)
-            print("H:", h2)
+            # print("H:", h2)
 
             # x = np.matmul(h2, vp2)
 
@@ -82,28 +82,42 @@ def update(event, x, y, flags, param):
             newImg = unwarpImage(h2)
             # cv2.imshow("res", newImg)
             cv2.imwrite("res.jpg", newImg)
-            cv2.destroyAllWindows()
             print("fini")
-            exit()
 
 
 def unwarpImage(h2):
     newImg = np.zeros_like(img)
-    imH = len(img[0])
-    imW = len(img[1])
-
+    imW = len(img[0])
+    imH = len(img)
+    print(imH, imW)
+    maxX = 0
+    minX = 0
+    maxY = 0
+    minY = 0
+    h2 = abs(h2)
     # print(newImg, len(newImg), len(newImg[0]))
     # print(len(img), len(img[370][630]))
-    for i in range(0, 630):
-        for j in range(0, 369):
-            pointToTransform = [i/100, j/100, 1]
+    for i in range(0, imW-1):
+        for j in range(0, imH-1):
+            pointToTransform = [i/imW, j/imH, 1]
             transf = np.matmul(h2, pointToTransform)
             # print(pointToTransform)
-            transf = abs(transf*100/transf[2])
+            transf = transf/transf[2]
             # if(i % 20 == 0):
             # print("transfo", transf)
-            newX = int(transf[0])
-            newY = int(transf[1])
+            newX = int(transf[0]*631)
+            newY = int(transf[1]*370)
+            if(newX >= maxX):
+                maxX = newX
+            else:
+                if(newX <= minX):
+                    minX = newX
+            if(newY >= maxY):
+                maxY = newY
+            else:
+                if(newY <= minY):
+                    minY = newY
+
             # print("new x:", newX, "new y:", newY)
             # print("i:", i, "j:", j)
 
@@ -113,6 +127,7 @@ def unwarpImage(h2):
             # else:
             #     print("out of bounds")
 
+    print(maxX, maxY, minX, minY)
     return newImg
 
 
@@ -128,13 +143,12 @@ def calculIntersection(index):
     print(coordo)
     d1 = np.cross(coordo[index], coordo[index+1])
     d2 = np.cross(coordo[index+2], coordo[index+3])
+    print("d1:", d1)
+    print("d2:", d2)
+
     vp = np.cross(d1, d2)
     print("VP:", vp)
     return vp
-
-
-# def horizon():
-#     d1 =
 
 
 cv2.namedWindow("fenetre image")
@@ -142,5 +156,3 @@ cv2.moveWindow("fenetre image", 70, 30)
 cv2.setMouseCallback("fenetre image", update)
 cv2.imshow("fenetre image", img)
 cv2.waitKey(0)
-
-# print(coordoX[0], coordoY[0])
